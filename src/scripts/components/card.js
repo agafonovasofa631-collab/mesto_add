@@ -40,3 +40,25 @@ export const createCardElement = (
 
   return cardElement;
 };
+export const initialCards = [
+  {
+    _id: "1",
+    name: "Архыз",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+    createdAt: "2024-02-10T12:00:00Z",
+    likes: [
+      { _id: "u1", name: "Иван Петров", avatar: "https://i.pravatar.cc/150?img=1" },
+      { _id: "u2", name: "Мария Сидорова", avatar: "https://i.pravatar.cc/150?img=2" }
+    ]
+  },
+  {
+    _id: "2",
+    name: "Челябинская область",
+    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+    createdAt: "2024-02-15T14:30:00Z",
+    likes: [
+      { _id: "u3", name: "Алексей Смирнов", avatar: "https://i.pravatar.cc/150?img=3" }
+    ]
+  },
+  // ... остальные карточки аналогично добавьте поля
+];

@@ -1,3 +1,4 @@
+const getCards = () => Promise.resolve(initialCards);
 export const initialCards = [
     {
       name: "Архыз",
