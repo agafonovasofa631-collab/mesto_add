@@ -1,64 +1,39 @@
+export const createCardElement = (cardData, options) => {
+  const cardTemplate = document.querySelector("#card-template").content;
+  const cardElement = cardTemplate.cloneNode(true);
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  const likeButton = cardElement.querySelector(".card__like-button");
+  const deleteButton = cardElement.querySelector(".card__control-button_type_delete");
+  const infoButton = cardElement.querySelector(".card__control-button_type_info");
+
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+  cardTitle.textContent = cardData.name;
+
+  likeButton.addEventListener("click", () => {
+    options.onLikeIcon(likeButton, cardData._id);
+  });
+
+  deleteButton.addEventListener("click", () => {
+    options.onDeleteCard(cardElement, cardData._id);
+  });
+
+  infoButton.addEventListener("click", () => {
+    options.onInfoClick(cardData._id);
+  });
+
+  cardImage.addEventListener("click", () => {
+    options.onPreviewPicture(cardData);
+  });
+
+  return cardElement;
+};
+
 export const likeCard = (likeButton) => {
-  likeButton.classList.toggle("card__like-button_is-active");
+  likeButton.classList.toggle("card__like-button_active");
 };
 
 export const deleteCard = (cardElement) => {
   cardElement.remove();
 };
-
-const getTemplate = () => {
-  return document
-    .getElementById("card-template")
-    .content.querySelector(".card")
-    .cloneNode(true);
-};
-
-export const createCardElement = (
-  data,
-  { onPreviewPicture, onLikeIcon, onDeleteCard }
-) => {
-  const cardElement = getTemplate();
-  const likeButton = cardElement.querySelector(".card__like-button");
-  const deleteButton = cardElement.querySelector(".card__control-button_type_delete");
-  const cardImage = cardElement.querySelector(".card__image");
-
-  cardImage.src = data.link;
-  cardImage.alt = data.name;
-  cardElement.querySelector(".card__title").textContent = data.name;
-
-  if (onLikeIcon) {
-    likeButton.addEventListener("click", () => onLikeIcon(likeButton));
-  }
-
-  if (onDeleteCard) {
-    deleteButton.addEventListener("click", () => onDeleteCard(cardElement));
-  }
-
-  if (onPreviewPicture) {
-    cardImage.addEventListener("click", () => onPreviewPicture({name: data.name, link: data.link}));
-  }
-
-  return cardElement;
-};
-export const initialCards = [
-  {
-    _id: "1",
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-    createdAt: "2024-02-10T12:00:00Z",
-    likes: [
-      { _id: "u1", name: "Иван Петров", avatar: "https://i.pravatar.cc/150?img=1" },
-      { _id: "u2", name: "Мария Сидорова", avatar: "https://i.pravatar.cc/150?img=2" }
-    ]
-  },
-  {
-    _id: "2",
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-    createdAt: "2024-02-15T14:30:00Z",
-    likes: [
-      { _id: "u3", name: "Алексей Смирнов", avatar: "https://i.pravatar.cc/150?img=3" }
-    ]
-  },
-  // ... остальные карточки аналогично добавьте поля
-];
