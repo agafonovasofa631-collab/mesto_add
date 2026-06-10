@@ -27,6 +27,16 @@ const avatarInput = avatarForm.querySelector(".popup__input");
 const openProfileFormButton = document.querySelector(".profile__edit-button");
 const openCardFormButton = document.querySelector(".profile__add-button");
 
+import { enableValidation } from './components/validate.js';
+
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+});
 // Модальное окно статистики
 const infoModalWindow = document.querySelector(".popup_type_info");
 const infoDefinitionList = document.querySelector(".popup-info__definition-list");
