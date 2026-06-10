@@ -55,3 +55,12 @@ export const unlikeCardApi = (cardId) =>
     method: "DELETE",
     headers: config.headers,
   }).then(checkResponse);
+const config = {
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-61", // замените 61 на номер вашей группы
+  headers: {
+    authorization: "6754474d-5b84-47e5-9e34-4ed66ebc5fbc",
+    "Content-Type": "application/json",
+  },
+};
+
+// ... остальной код без изменений
