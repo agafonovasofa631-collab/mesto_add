@@ -1,7 +1,36 @@
-import { getCurrentUser, getCards, addCard, updateUser, updateAvatar, deleteCardApi, likeCardApi, unlikeCardApi } from "./components/api.js";
+// Импорт стилей (обязательно!)
+import "../../pages/index.css";
+
+// Импорт API и компонентов (пути теперь правильные)
+import {
+  getCurrentUser,
+  getCards,
+  addCard,
+  updateUser,
+  updateAvatar,
+  deleteCardApi,
+  likeCardApi,
+  unlikeCardApi
+} from "./components/api.js";
 import { createCardElement } from "./components/card.js";
-import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
-// DOM элементы
+import {
+  openModalWindow,
+  closeModalWindow,
+  setCloseModalWindowEventListeners
+} from "./components/modal.js";
+import { enableValidation } from "./components/validate.js";
+
+// ---------- Настройка валидации ----------
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
+// ---------- DOM элементы ----------
 const placesWrap = document.querySelector(".places__list");
 const profileFormModalWindow = document.querySelector(".popup_type_edit");
 const profileForm = profileFormModalWindow.querySelector(".popup__form");
@@ -27,16 +56,6 @@ const avatarInput = avatarForm.querySelector(".popup__input");
 const openProfileFormButton = document.querySelector(".profile__edit-button");
 const openCardFormButton = document.querySelector(".profile__add-button");
 
-import { enableValidation } from './components/validate.js';
-
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-});
 // Модальное окно статистики
 const infoModalWindow = document.querySelector(".popup_type_info");
 const infoDefinitionList = document.querySelector(".popup-info__definition-list");
@@ -44,12 +63,16 @@ const infoUsersList = document.querySelector(".popup-info__users-list");
 const infoDefinitionTemplate = document.querySelector("#popup-info-definition-template").content;
 const infoUserTemplate = document.querySelector("#popup-info-user-preview-template").content;
 
-// Переменная для хранения ID текущего пользователя
+// ---------- Переменные ----------
 let currentUserId = null;
 
 // ---------- Вспомогательные функции для статистики ----------
 const formatDate = (date) =>
-  date.toLocaleDateString("ru-RU", { year: "numeric", month: "long", day: "numeric" });
+  date.toLocaleDateString("ru-RU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
 
 const createInfoString = (label, value) => {
   const el = infoDefinitionTemplate.cloneNode(true);
@@ -87,7 +110,7 @@ const handleInfoClick = (cardId) => {
     .catch(console.error);
 };
 
-// ---------- Остальные обработчики ----------
+// ---------- Обработчики ----------
 const handlePreviewPicture = ({ name, link }) => {
   imageElement.src = link;
   imageElement.alt = name;
@@ -130,7 +153,7 @@ const handleCardFormSubmit = (evt) => {
         onUnlike: unlikeCardApi,
         onDelete: handleDeleteCard,
         onInfoClick: handleInfoClick,
-        currentUserId,
+        currentUserId
       });
       placesWrap.prepend(cardElement);
       closeModalWindow(cardFormModalWindow);
@@ -161,14 +184,14 @@ Promise.all([getCurrentUser(), getCards()])
           onUnlike: unlikeCardApi,
           onDelete: handleDeleteCard,
           onInfoClick: handleInfoClick,
-          currentUserId,
+          currentUserId
         })
       );
     });
   })
   .catch(console.error);
 
-// ---------- Слушатели ----------
+// ---------- Слушатели событий ----------
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 avatarForm.addEventListener("submit", handleAvatarSubmit);
@@ -191,3 +214,6 @@ openCardFormButton.addEventListener("click", () => {
 
 // Закрытие попапов
 document.querySelectorAll(".popup").forEach(popup => setCloseModalWindowEventListeners(popup));
+
+// ---------- Запуск валидации ----------
+enableValidation(validationConfig);
