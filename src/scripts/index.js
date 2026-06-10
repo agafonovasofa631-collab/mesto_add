@@ -1,7 +1,6 @@
-import { getCurrentUser, getCards, addCard, updateUser, updateAvatar, deleteCardApi, likeCardApi, unlikeCardApi } from "../components/api.js";
-import { createCardElement } from "../components/card.js";
-import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "../components/modal.js";
-
+import { getCurrentUser, getCards, addCard, updateUser, updateAvatar, deleteCardApi, likeCardApi, unlikeCardApi } from "./components/api.js";
+import { createCardElement } from "./components/card.js";
+import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
 // DOM элементы
 const placesWrap = document.querySelector(".places__list");
 const profileFormModalWindow = document.querySelector(".popup_type_edit");
