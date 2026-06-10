@@ -1,7 +1,7 @@
 const config = {
   baseUrl: "https://mesto.nomoreparties.co/v1/cohort-xx", // замените xx на вашу группу
   headers: {
-    authorization: "ваш-токен", // замените на ваш токен
+    authorization: "6754474d-5b84-47e5-9e34-4ed66ebc5fbc", // замените на ваш токен
     "Content-Type": "application/json",
   },
 };
