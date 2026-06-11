@@ -208,14 +208,14 @@ Promise.all([getCurrentUser(), getCards()])
 
     cards.forEach((card) => {
       placesWrap.append(
-        createCardElement(card, {
-          onPreviewPicture: handlePreviewPicture,
-          onLike: likeCardApi,
-          onUnlike: unlikeCardApi,
-          onDelete: handleDeleteCard,
-          onInfoClick: handleInfoClick,
-          currentUserId
-        })
+createCardElement(card, {
+  onPreviewPicture: handlePreviewPicture,
+  onLike: likeCardApi,
+  onUnlike: unlikeCardApi,
+  deleteCardApi: deleteCardApi,   // добавлено
+  onInfoClick: handleInfoClick,
+  currentUserId,
+});
       );
     });
   })
