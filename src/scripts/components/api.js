@@ -5,6 +5,7 @@ const config = {
     "Content-Type": "application/json",
   },
 };
+
 const checkResponse = (res) => {
   if (res.ok) return res.json();
   return Promise.reject(`Ошибка: ${res.status}`);
@@ -54,4 +55,3 @@ export const unlikeCardApi = (cardId) =>
     method: "DELETE",
     headers: config.headers,
   }).then(checkResponse);
-
