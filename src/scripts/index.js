@@ -1,5 +1,5 @@
 // Импорт стилей (обязательно!)
-import "../../pages/index.css";
+import "../pages/index.css";
 
 // Импорт API и компонентов (пути теперь правильные)
 import {
@@ -18,7 +18,7 @@ import {
   closeModalWindow,
   setCloseModalWindowEventListeners
 } from "./components/modal.js";
-import { enableValidation } from "./components/validate.js";
+import { enableValidation, clearValidation } from "./components/validate.js";
 
 // ---------- Настройка валидации ----------
 const validationConfig = {
