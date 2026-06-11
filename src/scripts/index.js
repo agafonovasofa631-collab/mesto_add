@@ -1,7 +1,7 @@
 // Импорт стилей (обязательно!)
 import "../pages/index.css";
 
-// Импорт API и компонентов (пути теперь правильные)
+// Импорт API и компонентов
 import {
   getCurrentUser,
   getCards,
@@ -91,7 +91,7 @@ const createUserPreview = (user) => {
   return el;
 };
 
-// ---------- Обработчик кнопки "i" ----------
+// ---------- Обработчик кнопки "i" (статистика) ----------
 const handleInfoClick = (cardId) => {
   getCards()
     .then((cards) => {
@@ -101,6 +101,7 @@ const handleInfoClick = (cardId) => {
       infoUsersList.innerHTML = "";
       infoDefinitionList.append(
         createInfoString("Название:", cardData.name),
+        createInfoString("Владелец:", cardData.owner.name),
         createInfoString("Дата создания:", formatDate(new Date(cardData.createdAt))),
         createInfoString("Количество лайков:", cardData.likes.length.toString())
       );
@@ -110,7 +111,7 @@ const handleInfoClick = (cardId) => {
     .catch(console.error);
 };
 
-// ---------- Обработчики ----------
+// ---------- Обработчик просмотра изображения ----------
 const handlePreviewPicture = ({ name, link }) => {
   imageElement.src = link;
   imageElement.alt = name;
@@ -118,8 +119,14 @@ const handlePreviewPicture = ({ name, link }) => {
   openModalWindow(imageModalWindow);
 };
 
+// ---------- Обработчики отправки форм (с блокировкой кнопок) ----------
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
+  const button = evt.submitter;
+  const originalText = button.textContent;
+  button.textContent = "Сохранение...";
+  button.disabled = true;
+
   const name = profileTitleInput.value;
   const about = profileDescriptionInput.value;
   updateUser(name, about)
@@ -128,21 +135,39 @@ const handleProfileFormSubmit = (evt) => {
       profileDescription.textContent = about;
       closeModalWindow(profileFormModalWindow);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      button.textContent = originalText;
+      button.disabled = false;
+    });
 };
 
 const handleAvatarSubmit = (evt) => {
   evt.preventDefault();
+  const button = evt.submitter;
+  const originalText = button.textContent;
+  button.textContent = "Сохранение...";
+  button.disabled = true;
+
   updateAvatar(avatarInput.value)
     .then((user) => {
       profileAvatar.style.backgroundImage = `url(${user.avatar})`;
       closeModalWindow(avatarFormModalWindow);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      button.textContent = originalText;
+      button.disabled = false;
+    });
 };
 
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
+  const button = evt.submitter;
+  const originalText = button.textContent;
+  button.textContent = "Создание...";
+  button.disabled = true;
+
   const name = cardNameInput.value;
   const link = cardLinkInput.value;
   addCard(name, link)
@@ -159,9 +184,14 @@ const handleCardFormSubmit = (evt) => {
       closeModalWindow(cardFormModalWindow);
       cardForm.reset();
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      button.textContent = originalText;
+      button.disabled = false;
+    });
 };
 
+// ---------- Удаление карточки ----------
 const handleDeleteCard = (cardId, cardElement) => {
   deleteCardApi(cardId)
     .then(() => cardElement.remove())
@@ -196,6 +226,7 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 avatarForm.addEventListener("submit", handleAvatarSubmit);
 
+// Открытие попапа редактирования профиля
 openProfileFormButton.addEventListener("click", () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -203,19 +234,22 @@ openProfileFormButton.addEventListener("click", () => {
   openModalWindow(profileFormModalWindow);
 });
 
+// Открытие попапа обновления аватара
 profileAvatar.addEventListener("click", () => {
   avatarForm.reset();
-  clearValidation(avatarForm, validationConfig); 
+  clearValidation(avatarForm, validationConfig);
   openModalWindow(avatarFormModalWindow);
 });
 
+// Открытие попапа добавления карточки
 openCardFormButton.addEventListener("click", () => {
   cardForm.reset();
+  clearValidation(cardForm, validationConfig);
   openModalWindow(cardFormModalWindow);
 });
 
-// Закрытие попапов
+// Закрытие попапов (универсальные обработчики)
 document.querySelectorAll(".popup").forEach(popup => setCloseModalWindowEventListeners(popup));
 
-// ---------- Запуск валидации ----------
+// Запуск валидации для всех форм
 enableValidation(validationConfig);
