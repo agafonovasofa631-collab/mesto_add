@@ -1,4 +1,3 @@
-// Импорт API-функций для лайка (прямо в модуль карты)
 import { likeCardApi, unlikeCardApi } from "./api.js";
 
 export const createCardElement = (cardData, options) => {
@@ -9,20 +8,19 @@ export const createCardElement = (cardData, options) => {
   const likeButton = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__control-button_type_delete");
   const infoButton = cardElement.querySelector(".card__control-button_type_info");
-  const likeCountElement = cardElement.querySelector(".card__like-count"); // уже есть в шаблоне
+  const likeCountElement = cardElement.querySelector(".card__like-count"); // из шаблона
 
-  // Заполняем данные карточки
+  // Заполнение данными
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
   likeCountElement.textContent = cardData.likes.length;
 
-  // Устанавливаем активное состояние кнопки лайка
   if (cardData.likes.some(like => like._id === options.currentUserId)) {
     likeButton.classList.add("card__like-button_active");
   }
 
-  // Функция-обработчик лайка (создаётся один раз на карточку, но логика вынесена в отдельную функцию)
+  // Обработчик лайка
   const handleLikeClick = () => {
     const isLiked = likeButton.classList.contains("card__like-button_active");
     const likeMethod = isLiked ? unlikeCardApi : likeCardApi;
@@ -35,19 +33,21 @@ export const createCardElement = (cardData, options) => {
       .catch(console.error);
   };
 
-  // Навешиваем обработчики событий
   likeButton.addEventListener("click", handleLikeClick);
 
+  // Удаление карточки (с вызовом API)
   deleteButton.addEventListener("click", () => {
     options.deleteCardApi(cardData._id)
       .then(() => cardElement.remove())
       .catch(console.error);
   });
 
+  // Кнопка статистики
   infoButton.addEventListener("click", () => {
     options.onInfoClick(cardData._id);
   });
 
+  // Открытие изображения
   cardImage.addEventListener("click", () => {
     options.onPreviewPicture(cardData);
   });
