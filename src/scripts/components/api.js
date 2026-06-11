@@ -5,13 +5,6 @@ const config = {
     "Content-Type": "application/json",
   },
 };
-const config = {
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-61", 
-  headers: {
-    authorization: "6754474d-5b84-47e5-9e34-4ed66ebc5fbc",
-    "Content-Type": "application/json",
-  },
-};
 const checkResponse = (res) => {
   if (res.ok) return res.json();
   return Promise.reject(`Ошибка: ${res.status}`);
