@@ -1,4 +1,3 @@
-// Функция показа ошибки
 const showInputError = (formElement, inputElement, errorMessage, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   if (!errorElement) return;
@@ -7,7 +6,6 @@ const showInputError = (formElement, inputElement, errorMessage, config) => {
   errorElement.classList.add(config.errorClass);
 };
 
-// Функция скрытия ошибки
 const hideInputError = (formElement, inputElement, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   if (!errorElement) return;
@@ -16,7 +14,6 @@ const hideInputError = (formElement, inputElement, config) => {
   errorElement.textContent = "";
 };
 
-// Проверка валидности поля
 const checkInputValidity = (formElement, inputElement, config) => {
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, config);
@@ -25,7 +22,6 @@ const checkInputValidity = (formElement, inputElement, config) => {
   }
 };
 
-// Переключение состояния кнопки
 const toggleButtonState = (inputList, buttonElement, config) => {
   const hasInvalidInput = inputList.some(input => !input.validity.valid);
   if (hasInvalidInput) {
@@ -37,7 +33,6 @@ const toggleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-// Установка обработчиков для формы
 const setEventListeners = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
@@ -52,24 +47,21 @@ const setEventListeners = (formElement, config) => {
   });
 };
 
-// Главная функция включения валидации
 export const enableValidation = (config) => {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
   formList.forEach(formElement => {
     setEventListeners(formElement, config);
   });
 };
-// Очистка валидации формы (сброс ошибок и блокировка кнопки)
+
 export const clearValidation = (formElement, config) => {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
 
-  // Скрываем ошибки для каждого поля
   inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, config);
   });
 
-  // Делаем кнопку неактивной
   buttonElement.classList.add(config.inactiveButtonClass);
   buttonElement.disabled = true;
 };
