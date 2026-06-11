@@ -59,3 +59,17 @@ export const enableValidation = (config) => {
     setEventListeners(formElement, config);
   });
 };
+// Очистка валидации формы (сброс ошибок и блокировка кнопки)
+export const clearValidation = (formElement, config) => {
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+  const buttonElement = formElement.querySelector(config.submitButtonSelector);
+
+  // Скрываем ошибки для каждого поля
+  inputList.forEach((inputElement) => {
+    hideInputError(formElement, inputElement, config);
+  });
+
+  // Делаем кнопку неактивной
+  buttonElement.classList.add(config.inactiveButtonClass);
+  buttonElement.disabled = true;
+};
