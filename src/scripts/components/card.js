@@ -8,7 +8,7 @@ export const createCardElement = (cardData, options) => {
   const likeButton = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__control-button_type_delete");
   const infoButton = cardElement.querySelector(".card__control-button_type_info");
-  const likeCountElement = cardElement.querySelector(".card__like-count"); // из шаблона
+  const likeCountElement = cardElement.querySelector(".card__like-count");
 
   // Заполнение данными
   cardImage.src = cardData.link;
@@ -16,13 +16,16 @@ export const createCardElement = (cardData, options) => {
   cardTitle.textContent = cardData.name;
   likeCountElement.textContent = cardData.likes.length;
 
-if (cardData.likes.some(like => like._id === options.currentUserId)) {
-    likeButton.classList.add("card__like-button_is-active");
-}
-  // Обработчик лайка
+  // ---------- ИСПРАВЛЕНИЕ 1: единый класс для активного лайка ----------
+  const isLiked = cardData.likes.some(like => like._id === options.currentUserId);
+  if (isLiked) {
+    likeButton.classList.add("card__like-button_active");
+  }
+
+  // Обработчик лайка (используем тот же класс)
   const handleLikeClick = () => {
-    const isLiked = likeButton.classList.contains("card__like-button_active");
-    const likeMethod = isLiked ? unlikeCardApi : likeCardApi;
+    const liked = likeButton.classList.contains("card__like-button_active");
+    const likeMethod = liked ? unlikeCardApi : likeCardApi;
 
     likeMethod(cardData._id)
       .then((updatedCard) => {
@@ -31,22 +34,25 @@ if (cardData.likes.some(like => like._id === options.currentUserId)) {
       })
       .catch(console.error);
   };
-
   likeButton.addEventListener("click", handleLikeClick);
 
-  // Удаление карточки (с вызовом API)
-  deleteButton.addEventListener("click", () => {
-    options.deleteCardApi(cardData._id)
-      .then(() => cardElement.remove())
-      .catch(console.error);
-  });
+  // ---------- ИСПРАВЛЕНИЕ 2: показывать кнопку удаления только для своих карточек ----------
+  if (cardData.owner._id === options.currentUserId) {
+    deleteButton.addEventListener("click", () => {
+      options.deleteCardApi(cardData._id)
+        .then(() => cardElement.remove())
+        .catch(console.error);
+    });
+  } else {
+    deleteButton.remove(); // или deleteButton.style.display = "none";
+  }
 
-  // Кнопка статистики
+  // Кнопка статистики (без изменений)
   infoButton.addEventListener("click", () => {
     options.onInfoClick(cardData._id);
   });
 
-  // Открытие изображения
+  // Открытие изображения (без изменений)
   cardImage.addEventListener("click", () => {
     options.onPreviewPicture(cardData);
   });
