@@ -16,10 +16,9 @@ export const createCardElement = (cardData, options) => {
   cardTitle.textContent = cardData.name;
   likeCountElement.textContent = cardData.likes.length;
 
-  if (cardData.likes.some(like => like._id === options.currentUserId)) {
-    likeButton.classList.add("card__like-button_active");
-  }
-
+if (cardData.likes.some(like => like._id === options.currentUserId)) {
+    likeButton.classList.add("card__like-button_is-active");
+}
   // Обработчик лайка
   const handleLikeClick = () => {
     const isLiked = likeButton.classList.contains("card__like-button_active");
